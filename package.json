@@ -1,31 +1,26 @@
 {
-	"name": "json",
-	"displayName": "json",
-	"description": "Json for Visual Studio Code",
-	"version": "2.0.2",
-	"publisher": "ZainChen",
-	"homepage": "https://github.com/ZainChen/vscode-json#readme",
+	"name": "ssh-command",
+	"displayName": "ssh-command",
+	"description": "SSH and Command for Visual Studio Code",
+	"version": "0.0.1",
+	"publisher": "longbl",
+	"homepage": "https://github.com/llnuaa/ssh-command#readme",
 	"bugs": {
-		"url": "https://github.com/ZainChen/vscode-json/issues"
+		"url": "https://github.com/llnuaa/ssh-command/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ZainChen/vscode-json"
+		"url": "https://github.com/llnuaa/ssh-command"
 	},
 	"license": "MIT",
-	"author": "ZainChen <2384439266@qq.com>",
-	"icon": "resources/json-128.png",
+	"author": "longbl",
+	"icon": "resources/ssh-command-128.png",
 	"categories": [
 		"Extension Packs",
 		"Other"
 	],
 	"keywords": [
-		"zain",
-		"ZainChen",
-		"银",
-		"志银",
-		"陈志银",
-		"陈志振",
+		"longbl",
 		"json",
 		"html",
 		"css",
@@ -79,17 +74,17 @@
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "json-views",
-					"title": "json",
-					"icon": "./resources/json-500.png"
+					"id": "ssh-command-views",
+					"title": "ssh-command",
+					"icon": "./resources/ssh-command-500.png"
 				}
 			]
 		},
 		"views": {
-			"json-views": [
+			"ssh-command-views": [
 				{
 					"id": "jsonOutline",
-					"name": "Please open the json file.(ZainChen)"
+					"name": "Please configure the json file."
 				}
 			]
 		},
@@ -97,6 +92,16 @@
 			"view/title": [
 				{
 					"command": "jsonOutline.refresh",
+					"when": "view == jsonOutline",
+					"group": "navigation"
+				},
+				{
+					"command": "jsonOutline.edit1",
+					"when": "view == jsonOutline",
+					"group": "navigation"
+				},
+				{
+					"command": "jsonOutline.edit2",
 					"when": "view == jsonOutline",
 					"group": "navigation"
 				}
@@ -120,6 +125,22 @@
 				"icon": {
 					"light": "./resources/light/refresh.svg",
 					"dark": "./resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "jsonOutline.edit1",
+				"title": "Edit SSH Config",
+				"icon": {
+					"light": "./resources/light/edit.svg",
+					"dark": "./resources/dark/edit.svg"
+				}
+			},
+			{
+				"command": "jsonOutline.edit2",
+				"title": "Edit Command Config",
+				"icon": {
+					"light": "./resources/light/edit.svg",
+					"dark": "./resources/dark/edit.svg"
 				}
 			},
 			{
@@ -149,14 +170,14 @@
 		"configuration": [
 			{
 				"type": "object",
-				"title": "JSON-zain",
+				"title": "SSH-Command",
 				"properties": {
-					"JSON-zain.author.ZainChen": {
+					"SSH-Command.author.longbl": {
 						"type": "string",
-						"default": "Welcome to vscode-json.",
-						"description": "Json for Visual Studio Code"
+						"default": "Welcome to ssh-command.",
+						"description": "SSH and Command for Visual Studio Code"
 					},
-					"JSON-zain.json.autorefresh": {
+					"SSH-Command.json.autorefresh": {
 						"type": "boolean",
 						"default": false,
 						"description": "Whether to update the menu in real time based on the contents of the json file!"
