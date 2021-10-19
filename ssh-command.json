@@ -1,0 +1,33 @@
+{
+    "servers" : [
+        {
+            "host" : "code-server",
+            "ip" : "10.66.9.65",
+            "user" : "longbl",
+            "pwd" : "asb#1234"
+        },
+        {
+            "host" : "code-server1",
+            "ip" : "10.66.9.65",
+            "user" : "longbl",
+            "pwd" : "asb#1234"
+        }
+    ],
+    "commands" : [
+        {
+            "key" : "ls",
+            "value" : "ls",
+            "flag" : false
+        },
+        {
+            "key" : "ls1",
+            "value" : "ls",
+            "flag" : true
+        },
+        {
+            "key" : "ll",
+            "value" : "ll",
+            "flag" : true
+        }
+    ]
+}

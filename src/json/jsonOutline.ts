@@ -10,7 +10,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 	private tree: json.Node;
 	private text: string;
 	private editor: vscode.TextEditor;
-	private autoRefresh = true;
+	private autoRefresh = false;
 
 	constructor(private context: vscode.ExtensionContext) {
 		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());

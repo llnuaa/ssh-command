@@ -96,12 +96,7 @@
 					"group": "navigation"
 				},
 				{
-					"command": "jsonOutline.edit1",
-					"when": "view == jsonOutline",
-					"group": "navigation"
-				},
-				{
-					"command": "jsonOutline.edit2",
+					"command": "jsonOutline.edit",
 					"when": "view == jsonOutline",
 					"group": "navigation"
 				}
@@ -128,16 +123,8 @@
 				}
 			},
 			{
-				"command": "jsonOutline.edit1",
-				"title": "Edit SSH Config",
-				"icon": {
-					"light": "./resources/light/edit.svg",
-					"dark": "./resources/dark/edit.svg"
-				}
-			},
-			{
-				"command": "jsonOutline.edit2",
-				"title": "Edit Command Config",
+				"command": "jsonOutline.edit",
+				"title": "Edit SSH server and Command Config",
 				"icon": {
 					"light": "./resources/light/edit.svg",
 					"dark": "./resources/dark/edit.svg"
@@ -176,6 +163,11 @@
 						"type": "string",
 						"default": "Welcome to ssh-command.",
 						"description": "SSH and Command for Visual Studio Code"
+					},
+					"SSH-Command.config.path": {
+						"type": "string",
+						"default": "/home/longbl/ssh-command.json",
+						"description": "The real path about ssh server and command config json file"
 					},
 					"SSH-Command.json.autorefresh": {
 						"type": "boolean",
