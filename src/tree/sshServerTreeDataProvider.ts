@@ -2,15 +2,15 @@ import * as vscode from 'vscode';
 import * as json from 'jsonc-parser';
 import * as path from 'path';
 import * as fs from 'fs'
+import { SshServerNode } from './sshServerNode';
 
-export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
+export class SshServerTreeDataProvider implements vscode.TreeDataProvider<SshServerNode> {
 
-	private _onDidChangeTreeData: vscode.EventEmitter<number | null> = new vscode.EventEmitter<number | null>();
-	readonly onDidChangeTreeData: vscode.Event<number | null> = this._onDidChangeTreeData.event;
+	private _onDidChangeTreeData: vscode.EventEmitter<SshServerNode | undefined | null> = new vscode.EventEmitter<SshServerNode | undefined | null>();
+	readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
 
-	private tree: json.Node;
 	private path: string;
-	private text: string;
+	private serverNodes: SshServerNode[];
 
 	constructor(private context: vscode.ExtensionContext) {
 		this.path = vscode.workspace.getConfiguration('SSH-Command.config').get('path');
@@ -23,63 +23,38 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 	}
 
 	private parseTree(): void {
-		this.tree = null;
 		let file = vscode.Uri.file(this.path);
-		this.text = fs.readFileSync(this.path, "utf-8");
-		this.tree = json.parse(this.text);
-		let servers = this.tree['servers'];
-		let length = servers.length;
+		let text = fs.readFileSync(this.path, "utf-8");
+		let tree = json.parse(text);
+		let servers = tree['servers'];
+		const res: SshServerNode[] = [];
+		for (const server of servers) {
+			let node = new SshServerNode(Object.assign({}, {
+				host: server['host'],
+				ip: server['ip'],
+				user: server['user'],
+				pwd: server['pwd'],
+			}));
+			res.push(node);
+		}
+		this.serverNodes = res;
 		let server1 = servers[0];
 		let host = server1['host'];
-		let commands = this.tree['commands'];
+		let commands = tree['commands'];
 	}
 
-	getChildren(offset?: number): Thenable<number[]> {
-		if (offset) {
-			const path = json.getLocation(this.text, offset).path;
-			const node = json.findNodeAtLocation(this.tree, path);
-			return Promise.resolve(this.getChildrenOffsets(node));
-		} else {
-			return Promise.resolve(this.tree ? this.getChildrenOffsets(this.tree) : []);
-		}
+	getChildren(element?: SshServerNode | undefined): vscode.ProviderResult<SshServerNode[]> {
+		return this.serverNodes;
 	}
 
-	private getChildrenOffsets(node: json.Node): number[] {
-		const offsets: number[] = [];
-		if (node && node.children) {
-			for (const child of node.children) {
-				const childPath = json.getLocation(this.text, child.offset).path;
-				const childNode = json.findNodeAtLocation(this.tree, childPath);
-				if (childNode) {
-					offsets.push(childNode.offset);
-				}
-			}
-		}
-		return offsets;
-	}
-
-	getTreeItem(offset: number): vscode.TreeItem {
-		const path = json.getLocation(this.text, offset).path;
-		const valueNode = json.findNodeAtLocation(this.tree, path);
-		if (valueNode) {
-			const hasChildren = valueNode.type === 'object' || valueNode.type === 'array';
-			const treeItem: vscode.TreeItem = new vscode.TreeItem(this.getLabel(valueNode), hasChildren ? valueNode.type === 'object' ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None);
-			treeItem.command = {
-				command: 'extension.openJsonSelection',
-				title: '',
-				arguments: []
-			};
-			treeItem.iconPath = this.getIcon(valueNode);
-			treeItem.contextValue = valueNode.type;
-			return treeItem;
-		}
-		return null;
-	}
-
-	select(range: vscode.Range) {
-		// this.editor.selection = new vscode.Selection(range.start, range.end);
-		// // 编辑窗跳转到指定范围
-        // this.editor.revealRange(range, vscode.TextEditorRevealType.InCenter);
+	getTreeItem(element: SshServerNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
+		return {
+            label: element.host,
+            tooltip: element.host,
+            collapsibleState: vscode.TreeItemCollapsibleState.None,
+            iconPath: null,
+            command: element.command,
+        };
 	}
 
 	private getIcon(node: json.Node): any {
