@@ -76,7 +76,7 @@
 				{
 					"id": "ssh-command-views",
 					"title": "ssh-command",
-					"icon": "./resources/ssh-command-500.png"
+					"icon": "resources/lightning.png"
 				}
 			]
 		},
@@ -84,7 +84,11 @@
 			"ssh-command-views": [
 				{
 					"id": "jsonOutline",
-					"name": "Please configure the json file."
+					"name": "ssh server"
+				},
+				{
+					"id": "jsonOutline1",
+					"name": "quick command"
 				}
 			]
 		},
@@ -92,24 +96,13 @@
 			"view/title": [
 				{
 					"command": "jsonOutline.refresh",
-					"when": "view == jsonOutline",
+					"when": "view == jsonOutline || view == jsonOutline1",
 					"group": "navigation"
 				},
 				{
 					"command": "jsonOutline.edit",
-					"when": "view == jsonOutline",
+					"when": "view == jsonOutline || view == jsonOutline1",
 					"group": "navigation"
-				}
-			],
-			"view/item/context": [
-				{
-					"command": "jsonOutline.renameNode",
-					"when": "view == jsonOutline"
-				},
-				{
-					"command": "jsonOutline.refreshNode",
-					"when": "view == jsonOutline",
-					"group": "inline"
 				}
 			]
 		},
@@ -118,29 +111,17 @@
 				"command": "jsonOutline.refresh",
 				"title": "Refresh",
 				"icon": {
-					"light": "./resources/light/refresh.svg",
-					"dark": "./resources/dark/refresh.svg"
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
 				}
 			},
 			{
 				"command": "jsonOutline.edit",
 				"title": "Edit SSH server and Command Config",
 				"icon": {
-					"light": "./resources/light/edit.svg",
-					"dark": "./resources/dark/edit.svg"
+					"light": "resources/light/edit.svg",
+					"dark": "resources/dark/edit.svg"
 				}
-			},
-			{
-				"command": "jsonOutline.refreshNode",
-				"title": "Refresh",
-				"icon": {
-					"light": "./resources/light/refresh.svg",
-					"dark": "./resources/dark/refresh.svg"
-				}
-			},
-			{
-				"command": "jsonOutline.renameNode",
-				"title": "Rename"
 			}
 		],
 		"languages": [
@@ -168,11 +149,6 @@
 						"type": "string",
 						"default": "/home/longbl/ssh-command.json",
 						"description": "The real path about ssh server and command config json file"
-					},
-					"SSH-Command.json.autorefresh": {
-						"type": "boolean",
-						"default": false,
-						"description": "Whether to update the menu in real time based on the contents of the json file!"
 					}
 				}
 			}

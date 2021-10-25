@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as json from 'jsonc-parser';
 import * as path from 'path';
+import * as fs from 'fs'
 
 export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 
@@ -8,87 +9,29 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 	readonly onDidChangeTreeData: vscode.Event<number | null> = this._onDidChangeTreeData.event;
 
 	private tree: json.Node;
+	private path: string;
 	private text: string;
-	private editor: vscode.TextEditor;
-	private autoRefresh = false;
 
 	constructor(private context: vscode.ExtensionContext) {
-		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
-		vscode.workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
+		this.path = vscode.workspace.getConfiguration('SSH-Command.config').get('path');
 		this.parseTree();
-		this.autoRefresh = vscode.workspace.getConfiguration('JSON-zain.json').get('autorefresh');
-		vscode.workspace.onDidChangeConfiguration(() => {
-			this.autoRefresh = vscode.workspace.getConfiguration('JSON-zain.json').get('autorefresh');
-		});
-		this.onActiveEditorChanged();
 	}
 
 	refresh(offset?: number): void {
 		this.parseTree();
-		if (offset) {
-			this._onDidChangeTreeData.fire(offset);
-		} else {
-			this._onDidChangeTreeData.fire(undefined);
-		}
-	}
-
-	rename(offset: number): void {
-		vscode.window.showInputBox({ placeHolder: 'Enter the new label' })
-			.then(value => {
-				if (value !== null && value !== undefined) {
-					this.editor.edit(editBuilder => {
-						const path = json.getLocation(this.text, offset).path;
-						let propertyNode = json.findNodeAtLocation(this.tree, path);
-						if (propertyNode.parent.type !== 'array') {
-							propertyNode = propertyNode.parent.children[0];
-						}
-						const range = new vscode.Range(this.editor.document.positionAt(propertyNode.offset), this.editor.document.positionAt(propertyNode.offset + propertyNode.length));
-						editBuilder.replace(range, `"${value}"`);
-						setTimeout(() => {
-							this.parseTree();
-							this.refresh(offset);
-						}, 100);
-					});
-				}
-			});
-	}
-
-	private onActiveEditorChanged(): void {
-		if (vscode.window.activeTextEditor) {
-			if (vscode.window.activeTextEditor.document.uri.scheme === 'file') {
-				const enabled = vscode.window.activeTextEditor.document.languageId === 'json' || vscode.window.activeTextEditor.document.languageId === 'jsonc';
-				vscode.commands.executeCommand('setContext', 'jsonOutlineEnabled', enabled);
-				// if (enabled) {
-				// 	this.refresh();
-				// }
-			}
-		} else {
-			vscode.commands.executeCommand('setContext', 'jsonOutlineEnabled', false);
-		}
-		// 切换文件，刷新
-		this.refresh();
-	}
-
-	private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent): void {
-		if (this.autoRefresh && changeEvent.document.uri.toString() === this.editor.document.uri.toString()) {
-			for (const change of changeEvent.contentChanges) {
-				const path = json.getLocation(this.text, this.editor.document.offsetAt(change.range.start)).path;
-				path.pop();
-				const node = path.length ? json.findNodeAtLocation(this.tree, path) : void 0;
-				this.parseTree();
-				this._onDidChangeTreeData.fire(node ? node.offset : void 0);
-			}
-		}
+		this._onDidChangeTreeData.fire(undefined);
 	}
 
 	private parseTree(): void {
-		this.text = '';
 		this.tree = null;
-		this.editor = vscode.window.activeTextEditor;
-		if (this.editor && this.editor.document) {
-			this.text = this.editor.document.getText();
-			this.tree = json.parseTree(this.text);
-		}
+		let file = vscode.Uri.file(this.path);
+		this.text = fs.readFileSync(this.path, "utf-8");
+		this.tree = json.parse(this.text);
+		let servers = this.tree['servers'];
+		let length = servers.length;
+		let server1 = servers[0];
+		let host = server1['host'];
+		let commands = this.tree['commands'];
 	}
 
 	getChildren(offset?: number): Thenable<number[]> {
@@ -124,7 +67,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 			treeItem.command = {
 				command: 'extension.openJsonSelection',
 				title: '',
-				arguments: [new vscode.Range(this.editor.document.positionAt(valueNode.offset), this.editor.document.positionAt(valueNode.offset + valueNode.length))]
+				arguments: []
 			};
 			treeItem.iconPath = this.getIcon(valueNode);
 			treeItem.contextValue = valueNode.type;
@@ -134,9 +77,9 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 	}
 
 	select(range: vscode.Range) {
-		this.editor.selection = new vscode.Selection(range.start, range.end);
-		// 编辑窗跳转到指定范围
-        this.editor.revealRange(range, vscode.TextEditorRevealType.InCenter);
+		// this.editor.selection = new vscode.Selection(range.start, range.end);
+		// // 编辑窗跳转到指定范围
+        // this.editor.revealRange(range, vscode.TextEditorRevealType.InCenter);
 	}
 
 	private getIcon(node: json.Node): any {
@@ -183,7 +126,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 					return '[ '+ this.getNodeChildrenCount(node) +' ] ' + property;
 				}
 			}
-			const value = this.editor.document.getText(new vscode.Range(this.editor.document.positionAt(node.offset), this.editor.document.positionAt(node.offset + node.length)));
+			const value = "123";//this.editor.document.getText(new vscode.Range(this.editor.document.positionAt(node.offset), this.editor.document.positionAt(node.offset + node.length)));
 			return `${property}: ${value}`;
 		}
 	}
