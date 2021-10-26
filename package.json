@@ -69,7 +69,8 @@
 	"activationEvents": [
 		"onView:sshServerTree",
 		"onLanguage:json",
-		"onCommand:sshServerTree.openSshServer"
+		"onCommand:sshServerTree.openSshServer",
+		"onCommand:quickCommandTree.inputQuickCommand"
 	],
 	"contributes": {
 		"viewsContainers": {
@@ -88,7 +89,7 @@
 					"name": "ssh server"
 				},
 				{
-					"id": "jsonOutline1",
+					"id": "quickCommandTree",
 					"name": "quick command"
 				}
 			]
@@ -97,13 +98,23 @@
 			"view/title": [
 				{
 					"command": "sshServerTree.refresh",
-					"when": "view == sshServerTree || view == jsonOutline1",
-					"group": "navigation"
+					"when": "view == sshServerTree",
+					"group": "navigation@1"
 				},
 				{
 					"command": "sshServerTree.edit",
-					"when": "view == sshServerTree || view == jsonOutline1",
-					"group": "navigation"
+					"when": "view == sshServerTree",
+					"group": "navigation@1"
+				},
+				{
+					"command": "quickCommandTree.refresh",
+					"when": "view == quickCommandTree",
+					"group": "navigation@2"
+				},
+				{
+					"command": "quickCommandTree.edit",
+					"when": "view == quickCommandTree",
+					"group": "navigation@2"
 				}
 			],
 			"view/item/context": [
@@ -111,12 +122,25 @@
                     "command": "sshServerTree.openSshServer",
                     "when": "view == sshServerTree",
                     "group": "sshServer@1"
+                },
+				{
+                    "command": "quickCommandTree.inputQuickCommand",
+                    "when": "view == quickCommand",
+                    "group": "quickCommand@1"
                 }
 			]
 		},
 		"commands": [
 			{
 				"command": "sshServerTree.refresh",
+				"title": "Refresh",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "quickCommandTree.refresh",
 				"title": "Refresh",
 				"icon": {
 					"light": "resources/light/refresh.svg",
@@ -131,9 +155,21 @@
 					"dark": "resources/dark/edit.svg"
 				}
 			},
+			{
+				"command": "quickCommandTree.edit",
+				"title": "Edit SSH server and Command Config",
+				"icon": {
+					"light": "resources/light/edit.svg",
+					"dark": "resources/dark/edit.svg"
+				}
+			},
             {
                 "command": "sshServerTree.openSshServer",
                 "title": "Opem SSH Server"
+            },
+			{
+                "command": "quickCommandTree.inputQuickCommand",
+                "title": "Input Quick Command"
             }
 		],
 		"languages": [
@@ -161,6 +197,11 @@
 						"type": "string",
 						"default": "/home/longbl/ssh-command.json",
 						"description": "The real path about ssh server and command config json file"
+					},
+					"SSH-Command.config.sleep": {
+						"type": "number",
+						"default": "5000",
+						"description": "In windows, need more time to create terminal."
 					}
 				}
 			}

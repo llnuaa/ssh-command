@@ -1,4 +1,4 @@
-// Copyright (c) jdneo. All rights reserved.
+// Copyright (c) longbl. All rights reserved.
 // Licensed under the MIT license.
 
 import { Command, Uri } from "vscode";
@@ -22,14 +22,6 @@ export class SshServerNode {
     public get pwd(): string {
         return this.data.pwd;
     }
-
-    // public get dir(): string {
-    //     return this.data.dir;
-    // }
-
-    // public get isSshServer(): boolean {
-    //     return this.isSshServerNode;
-    // }
 
     public get command(): Command {
         return {

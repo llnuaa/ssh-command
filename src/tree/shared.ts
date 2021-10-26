@@ -7,7 +7,8 @@ export interface SshServer {
     pwd: string;
 }
 
-export interface SshServerArray {
-	dir: string;
-	servers: SshServer[];
+export interface QuickCommand {
+	key: string;
+	value: string;
+	flag: boolean;
 }
