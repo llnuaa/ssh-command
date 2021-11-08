@@ -38,9 +38,11 @@ export function activate(context: vscode.ExtensionContext) {
 		newTerm.show();
 		let arg = "ssh -o \"StrictHostKeyChecking no\" " + node.user + "@" + node.ip;
 		newTerm.sendText(arg);
-		let sleep_time = vscode.workspace.getConfiguration('SSH-Command.config').get('sleep');
-		await sleep(sleep_time);
-		newTerm.sendText(node.pwd);
+		if (node.pwd != "") {
+			let sleep_time = vscode.workspace.getConfiguration('SSH-Command.config').get('sleep');
+			await sleep(sleep_time);
+			newTerm.sendText(node.pwd);
+		}
 	});
 	vscode.commands.registerCommand('quickCommandTree.inputQuickCommand', async (node: QuickCommandNode) => {
 		const activeTerm = vscode.window.activeTerminal;
