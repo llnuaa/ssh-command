@@ -1,12 +1,24 @@
 // Copyright (c) longbl. All rights reserved.
 // Licensed under the MIT license.
 
-import { Command, Uri } from "vscode";
+import { TreeItem, TreeItemCollapsibleState } from "vscode";
 import { QuickCommand } from "./shared";
 
-export class QuickCommandNode {
+export class QuickCommandNode extends TreeItem {
+    public children: QuickCommandNode[] | undefined;
 
-    constructor(private data: QuickCommand) { }
+    constructor(private data: QuickCommand, children?: QuickCommandNode[] | undefined) {
+        super(data.key, children === undefined ? TreeItemCollapsibleState.None : TreeItemCollapsibleState.Collapsed);
+        if (children === undefined) {
+            this.command = {
+                title: "Input Quick Command",
+                command: "quickCommandTree.inputQuickCommand",
+                arguments: [this],
+            };
+        }
+        this.children = children;
+        this.tooltip = data.value;
+    }
 
     public get key(): string {
         return this.data.key;
@@ -17,14 +29,6 @@ export class QuickCommandNode {
 
     public get flag(): boolean {
         return this.data.flag;
-    }
-
-    public get command(): Command {
-        return {
-            title: "Input Quick Command",
-            command: "quickCommandTree.inputQuickCommand",
-            arguments: [this],
-        };
     }
 
 }

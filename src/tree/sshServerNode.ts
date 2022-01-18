@@ -1,12 +1,24 @@
 // Copyright (c) longbl. All rights reserved.
 // Licensed under the MIT license.
 
-import { Command, Uri } from "vscode";
+import { TreeItem, TreeItemCollapsibleState } from "vscode";
 import { SshServer } from "./shared";
 
-export class SshServerNode {
+export class SshServerNode extends TreeItem {
+    public children: SshServerNode[] | undefined;
 
-    constructor(private data: SshServer) { }
+    constructor(private data: SshServer, children?: SshServerNode[] | undefined) {
+        super(data.host, children === undefined ? TreeItemCollapsibleState.None : TreeItemCollapsibleState.Collapsed);
+        if (children === undefined) {
+            this.command = {
+                title: "Open SSH Server",
+                command: "sshServerTree.openSshServer",
+                arguments: [this],
+            };
+        }
+        this.children = children;
+        this.tooltip = data.ip;
+    }
 
     public get host(): string {
         return this.data.host;
@@ -21,14 +33,6 @@ export class SshServerNode {
 
     public get pwd(): string {
         return this.data.pwd;
-    }
-
-    public get command(): Command {
-        return {
-            title: "Open SSH Server",
-            command: "sshServerTree.openSshServer",
-            arguments: [this],
-        };
     }
 
 }

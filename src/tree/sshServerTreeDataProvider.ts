@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import * as json from 'jsonc-parser';
-import * as path from 'path';
 import * as fs from 'fs'
 import { SshServerNode } from './sshServerNode';
 
@@ -23,35 +22,41 @@ export class SshServerTreeDataProvider implements vscode.TreeDataProvider<SshSer
 	}
 
 	private parseTree(): void {
-		let file = vscode.Uri.file(this.path);
 		let text = fs.readFileSync(this.path, "utf-8");
 		let tree = json.parse(text);
 		let servers = tree['servers'];
 		const res: SshServerNode[] = [];
 		for (const server of servers) {
+			const children: SshServerNode[] = [];
+			for (const child of server['server']) {
+				let childNode = new SshServerNode(Object.assign({}, {
+					host: child['host'],
+					ip: child['ip'],
+					user: child['user'],
+					pwd: child['pwd'],
+				}), undefined);
+				children.push(childNode);
+			}
 			let node = new SshServerNode(Object.assign({}, {
-				host: server['host'],
-				ip: server['ip'],
-				user: server['user'],
-				pwd: server['pwd'],
-			}));
+				host: server['group'],
+				ip: server['group'],
+				user: server['group'],
+				pwd: server['group'],
+			}), children);
 			res.push(node);
 		}
 		this.serverNodes = res;
 	}
 
 	getChildren(element?: SshServerNode | undefined): vscode.ProviderResult<SshServerNode[]> {
-		return this.serverNodes;
+		if (element === undefined) {
+            return this.serverNodes;
+        }
+        return element.children;
 	}
 
 	getTreeItem(element: SshServerNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
-		return {
-            label: element.host,
-            tooltip: element.ip,
-            collapsibleState: vscode.TreeItemCollapsibleState.None,
-            iconPath: null,
-            command: element.command,
-        };
+		return element;
 	}
 
 }

@@ -1,33 +1,260 @@
 {
     "servers" : [
         {
-            "host" : "code-server",
-            "ip" : "10.66.9.65",
-            "user" : "longbl",
-            "pwd" : "asb#1234"
+            "group": "sHUB",
+            "server": [
+                {
+                    "host" : "code server",
+                    "ip" : "10.66.9.65",
+                    "user" : "longbl",
+                    "pwd" : "asb#1234"
+                },
+                {
+                    "host" : "HUB2.0 242",
+                    "ip" : "10.66.9.242",
+                    "user" : "toor4nsn",
+                    "pwd" : "oZPS0POrRieRtu"
+                },
+                {
+                    "host" : "local hub",
+                    "ip" : "192.168.255.129",
+                    "user" : "toor4nsn",
+                    "pwd" : "oZPS0POrRieRtu"
+                }
+            ]
         },
         {
-            "host" : "code-server1",
-            "ip" : "10.66.9.65",
-            "user" : "longbl",
-            "pwd" : "asb#1234"
+            "group": "gen4",
+            "server": [
+                {
+                    "host" : "wrlinb194",
+                    "ip" : "wrlinb194.emea.nsn-net.net",
+                    "user" : "longbl",
+                    "pwd" : ""
+                },
+                {
+                    "host" : "Gen4-Instance2-PC-132",
+                    "ip" : "10.66.9.132",
+                    "user" : "mengjiep",
+                    "pwd" : "asb#1234"
+                }
+            ]
+        },
+        {
+            "group": "UT",
+            "server": [
+                {
+                    "host" : "UT server-151",
+                    "ip" : "10.66.9.151",
+                    "user" : "jingywan",
+                    "pwd" : "asb#1234"
+                },
+                {
+                    "host" : "UT server-152",
+                    "ip" : "10.66.9.152",
+                    "user" : "jingywan",
+                    "pwd" : "asb#1234"
+                }
+            ]
+        },
+        {
+            "group": "other",
+            "server": [
+                {
+                    "host" : "10.66.26.75",
+                    "ip" : "10.66.26.75",
+                    "user" : "lilong",
+                    "pwd" : "asb#1234"
+                }
+            ]
         }
     ],
     "commands" : [
         {
-            "key" : "ls",
-            "value" : "ls",
-            "flag" : false
+            "group": "sHUB",
+            "server": [
+                {
+                    "key" : "repo init for asi-5g",
+                    "value" : "repo init -u ssh://gerrite1.ext.net.nokia.com:8282/SCRFSW/DAS/das -m manifest.xml -b asi-5g",
+                    "flag" : false
+                },
+                {
+                    "key" : "cmake for G1",
+                    "value" : "cmake -DCMAKE_TOOLCHAIN_FILE=../tools/cmake/linux_ASIHub_toolchain_G1.cmake ..",
+                    "flag" : true
+                },
+                {
+                    "key" : "cmake for G2",
+                    "value" : "cmake -DCMAKE_TOOLCHAIN_FILE=../tools/cmake/linux_ASIHub_toolchain_G2.cmake ..",
+                    "flag" : true
+                },
+                {
+                    "key" : "hub-user",
+                    "value" : "toor4nsn",
+                    "flag" : true
+                },
+                {
+                    "key" : "hub-pwd",
+                    "value" : "oZPS0POrRieRtu",
+                    "flag" : true
+                },
+                {
+                    "key" : "set IP",
+                    "value" : "./setIP.sh -p 10.66.26.118 -m 24 -g 10.66.26.1",
+                    "flag" : false
+                },
+                {
+                    "key" : "push1",
+                    "value" : "gitdir=$(git rev-parse --git-dir); scp -p -P 8282 longbl@gerrite1.ext.net.nokia.com:hooks/commit-msg ${gitdir}/hooks/",
+                    "flag" : true
+                },
+                {
+                    "key" : "push2 for asi-5g",
+                    "value" : "git push gerrite1 HEAD:refs/for/asi-5g",
+                    "flag" : true
+                },
+                {
+                    "key" : "mount",
+                    "value" : "mount -o remount rw /ffs/run/boot",
+                    "flag" : true
+                },
+                {
+                    "key" : "isHUBhasKey",
+                    "value" : "fusemgr is_development && echo yes",
+                    "flag" : true
+                },
+                {
+                    "key" : "push sct result",
+                    "value" : "curl --noproxy \"localhost,127.0.0.1,coop.int.net.nokia.com\" -X POST -H \"Content-Type: application/json\" -d @coop_sct_report.json  http://coop.int.net.nokia.com:3001/api/scbuilds/SC-RFSW -v || exit 1",
+                    "flag" : true
+                },
+                {
+                    "key" : "link CCS",
+                    "value" : "ln -sf /usr/lib/libCCS.so /lib/libccs.so",
+                    "flag" : true
+                },
+                {
+                    "key" : "ecl download",
+                    "value" : "python ECL.py --artuser jingywan --artpwd AKCp8jRGQ3kwMeFGgsBu2dj1HooDXA6uRRcXPydQHPsJWyaiF3ekDBt2ueZS8EGunyVCQekF8",
+                    "flag" : true
+                }
+            ]
         },
         {
-            "key" : "ls1",
-            "value" : "ls",
-            "flag" : true
+            "group": "gen4",
+            "server": [
+                {
+                    "key" : "ssh gen4 for rfsw",
+                    "value" : "ssh rfsw@192.168.101.1",
+                    "flag" : true
+                },
+                {
+                    "key" : "gen4-rfsw-user",
+                    "value" : "rfsw",
+                    "flag" : true
+                },
+                {
+                    "key" : "gen4-rfsw-pwd",
+                    "value" : "KRG3dFggxxHw+s0z64U0AR22VyjfnXdHrAVdSv5jpc4=",
+                    "flag" : true
+                },
+                {
+                    "key" : "gen4-root-user",
+                    "value" : "toor4nsn",
+                    "flag" : true
+                },
+                {
+                    "key" : "gen4-root-pwd",
+                    "value" : "I9LzXPHVEqLorL/x0tAG5ztQ/Y8vVmhmlN9LSkVW4CQ=",
+                    "flag" : true
+                },
+                {
+                    "key" : "gen4-serviceuser-user",
+                    "value" : "serviceuser",
+                    "flag" : true
+                },
+                {
+                    "key" : "gen4-serviceuser-pwd",
+                    "value" : "oBrd1RgbOasUtYAeVfxrW9yGHb6ONl0w+MJUoKrBMGE=",
+                    "flag" : true
+                },
+                {
+                    "key" : "repo init for FRU6_release",
+                    "value" : "repo init -u ssh://gerrite1.ext.net.nokia.com:8282/RFSW/PROJECTS/projects -b FRU6_release",
+                    "flag" : true
+                },
+                {
+                    "key" : "git lfs install",
+                    "value" : "git lfs install",
+                    "flag" : true
+                },
+                {
+                    "key" : "source seesetenv RFSW_ZEUS",
+                    "value" : "source seesetenv RFSW_ZEUS",
+                    "flag" : true
+                },
+                {
+                    "key" : "source build.env made2",
+                    "value" : "source build.env made2",
+                    "flag" : true
+                },
+                {
+                    "key" : "bitbake made2-rrh-base",
+                    "value" : "bitbake made2-rrh-base",
+                    "flag" : true
+                },
+                {
+                    "key" : "bitbake made2-rrh-full",
+                    "value" : "bitbake made2-rrh-full",
+                    "flag" : true
+                },
+                {
+                    "key" : "bitbake image-factory",
+                    "value" : "bitbake image-factory",
+                    "flag" : true
+                },
+                {
+                    "key" : "bitbake swup-multivariant",
+                    "value" : "bitbake swup-multivariant",
+                    "flag" : true
+                },
+                {
+                    "key" : "./run_multipack -c",
+                    "value" : "./run_multipack -c",
+                    "flag" : true
+                }
+            ]
         },
         {
-            "key" : "ll",
-            "value" : "ll",
-            "flag" : true
+            "group": "UT",
+            "server": [
+                {
+                    "key" : "cmake for x86_64",
+                    "value" : "cmake -DCMAKE_TOOLCHAIN_FILE=../tools/cmake/linux_ASIHub_toolchain_x86_64.cmake ..",
+                    "flag" : true
+                }
+            ]
+        },
+        {
+            "group": "other",
+            "server": [
+                {
+                    "key" : "commit_id",
+                    "value" : "commit_id=",
+                    "flag" : false
+                },
+                {
+                    "key" : "curl vs code",
+                    "value" : "curl -sSL \"https://update.code.visualstudio.com/commit:${commit_id}/server-linux-x64/stable\" -o vscode-server-linux-x64.tar.gz",
+                    "flag" : true
+                },
+                {
+                    "key" : "unzip vs code",
+                    "value" : "tar -xvzf vscode-server-linux-x64.tar.gz --strip-components 1",
+                    "flag" : true
+                }
+            ]
         }
+
     ]
 }
