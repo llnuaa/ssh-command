@@ -2,7 +2,7 @@
 	"name": "ssh-command",
 	"displayName": "ssh-command",
 	"description": "SSH and Command for Visual Studio Code",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"publisher": "longbl",
 	"homepage": "https://github.com/llnuaa/ssh-command#readme",
 	"bugs": {

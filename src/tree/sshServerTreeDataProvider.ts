@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as json from 'jsonc-parser';
-import * as fs from 'fs'
+import * as fs from 'fs';
 import { SshServerNode } from './sshServerNode';
 
 export class SshServerTreeDataProvider implements vscode.TreeDataProvider<SshServerNode> {

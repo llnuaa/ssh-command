@@ -13,8 +13,8 @@ import { QuickCommandNode } from './tree/quickCommandNode';
  export const sleep = (ms) => {
 	return new Promise(resolve =>
 		setTimeout(
-			resolve, ms))
-}
+			resolve, ms));
+};
 
 export function activate(context: vscode.ExtensionContext) {
 	const sshServerTreeDataProvider = new SshServerTreeDataProvider(context);
@@ -24,22 +24,18 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('sshServerTree.refresh', () => sshServerTreeDataProvider.refresh());
 	vscode.commands.registerCommand('quickCommandTree.refresh', () => quickCommandTreeDataProvider.refresh());
 	vscode.commands.registerCommand('sshServerTree.edit', async () => {
-		let path : string;
-		path = vscode.workspace.getConfiguration('SSH-Command.config').get('path');
-		vscode.window.showTextDocument(vscode.Uri.file(path));
+		vscode.window.showTextDocument(vscode.Uri.file(vscode.workspace.getConfiguration('SSH-Command.config').get('path')));
 	});
 	vscode.commands.registerCommand('quickCommandTree.edit', async () => {
-		let path : string;
-		path = vscode.workspace.getConfiguration('SSH-Command.config').get('path');
-		vscode.window.showTextDocument(vscode.Uri.file(path));
+		vscode.window.showTextDocument(vscode.Uri.file(vscode.workspace.getConfiguration('SSH-Command.config').get('path')));
 	});
 	vscode.commands.registerCommand('sshServerTree.openSshServer', async (node: SshServerNode) => {
 		const newTerm = vscode.window.createTerminal(node.host);
 		newTerm.show();
-		let arg = "ssh -o \"StrictHostKeyChecking no\" " + node.user + "@" + node.ip;
+		const arg = "ssh -o \"StrictHostKeyChecking no\" " + node.user + "@" + node.ip;
 		newTerm.sendText(arg);
 		if (node.pwd != "") {
-			let sleep_time = vscode.workspace.getConfiguration('SSH-Command.config').get('sleep');
+			const sleep_time = vscode.workspace.getConfiguration('SSH-Command.config').get('sleep');
 			await sleep(sleep_time);
 			newTerm.sendText(node.pwd);
 		}

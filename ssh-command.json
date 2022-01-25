@@ -72,7 +72,7 @@
     "commands" : [
         {
             "group": "sHUB",
-            "server": [
+            "command": [
                 {
                     "key" : "repo init for asi-5g",
                     "value" : "repo init -u ssh://gerrite1.ext.net.nokia.com:8282/SCRFSW/DAS/das -m manifest.xml -b asi-5g",
@@ -142,7 +142,7 @@
         },
         {
             "group": "gen4",
-            "server": [
+            "command": [
                 {
                     "key" : "ssh gen4 for rfsw",
                     "value" : "ssh rfsw@192.168.101.1",
@@ -227,7 +227,7 @@
         },
         {
             "group": "UT",
-            "server": [
+            "command": [
                 {
                     "key" : "cmake for x86_64",
                     "value" : "cmake -DCMAKE_TOOLCHAIN_FILE=../tools/cmake/linux_ASIHub_toolchain_x86_64.cmake ..",
@@ -237,7 +237,7 @@
         },
         {
             "group": "other",
-            "server": [
+            "command": [
                 {
                     "key" : "commit_id",
                     "value" : "commit_id=",

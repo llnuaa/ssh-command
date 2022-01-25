@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as json from 'jsonc-parser';
-import * as fs from 'fs'
+import * as fs from 'fs';
 import { QuickCommandNode } from './quickCommandNode';
 
 export class QuickCommandTreeDataProvider implements vscode.TreeDataProvider<QuickCommandNode> {
@@ -55,13 +55,6 @@ export class QuickCommandTreeDataProvider implements vscode.TreeDataProvider<Qui
 
 	getTreeItem(element: QuickCommandNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
 		return element;
-		return {
-            label: element.key,
-            tooltip: element.value,
-            collapsibleState: vscode.TreeItemCollapsibleState.None,
-            iconPath: null,
-            command: element.command,
-        };
 	}
 
 }
