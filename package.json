@@ -2,7 +2,7 @@
 	"name": "ssh-command",
 	"displayName": "ssh-command",
 	"description": "SSH and Command for Visual Studio Code",
-	"version": "0.0.4",
+	"version": "1.0.0",
 	"publisher": "longbl",
 	"homepage": "https://github.com/llnuaa/ssh-command#readme",
 	"bugs": {
@@ -195,7 +195,7 @@
 					},
 					"SSH-Command.config.path": {
 						"type": "string",
-						"default": "/home/longbl/ssh-command.json",
+						"default": "/home/longbl/ssh-command.json;C:/QMDownload/SoftMgr/sanbox/ssh-command.json;C:/Users/WDAGUtilityAccount/Downloads/sanbox/ssh-command.json",
 						"description": "The real path about ssh server and command config json file"
 					},
 					"SSH-Command.config.sleep": {

@@ -1,6 +1,7 @@
 'use strict';
 
 import * as vscode from 'vscode';
+import * as fs from 'fs';
 import { SshServerTreeDataProvider } from './tree/sshServerTreeDataProvider';
 import { QuickCommandTreeDataProvider } from './tree/quickCommandTreeDataProvider';
 import { SshServerNode } from './tree/sshServerNode';
@@ -17,17 +18,27 @@ import { QuickCommandNode } from './tree/quickCommandNode';
 };
 
 export function activate(context: vscode.ExtensionContext) {
-	const sshServerTreeDataProvider = new SshServerTreeDataProvider(context);
-	const quickCommandTreeDataProvider = new QuickCommandTreeDataProvider(context);
+	let path: string;
+	const pathConfigs: string = vscode.workspace.getConfiguration('SSH-Command.config').get('path');
+	const paths: string[] = pathConfigs.split(";");
+	for (const p of paths) {
+		if (fs.existsSync(p)) {
+			path = p;
+			break;
+		}
+	}
+
+	const sshServerTreeDataProvider = new SshServerTreeDataProvider(context, path);
+	const quickCommandTreeDataProvider = new QuickCommandTreeDataProvider(context, path);
 	vscode.window.createTreeView('sshServerTree', { treeDataProvider: sshServerTreeDataProvider, showCollapseAll: true });
 	vscode.window.createTreeView('quickCommandTree', { treeDataProvider: quickCommandTreeDataProvider, showCollapseAll: true });
 	vscode.commands.registerCommand('sshServerTree.refresh', () => sshServerTreeDataProvider.refresh());
 	vscode.commands.registerCommand('quickCommandTree.refresh', () => quickCommandTreeDataProvider.refresh());
 	vscode.commands.registerCommand('sshServerTree.edit', async () => {
-		vscode.window.showTextDocument(vscode.Uri.file(vscode.workspace.getConfiguration('SSH-Command.config').get('path')));
+		vscode.window.showTextDocument(vscode.Uri.file(path));
 	});
 	vscode.commands.registerCommand('quickCommandTree.edit', async () => {
-		vscode.window.showTextDocument(vscode.Uri.file(vscode.workspace.getConfiguration('SSH-Command.config').get('path')));
+		vscode.window.showTextDocument(vscode.Uri.file(path));
 	});
 	vscode.commands.registerCommand('sshServerTree.openSshServer', async (node: SshServerNode) => {
 		const newTerm = vscode.window.createTerminal(node.host);

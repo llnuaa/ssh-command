@@ -11,8 +11,8 @@ export class QuickCommandTreeDataProvider implements vscode.TreeDataProvider<Qui
 	private path: string;
 	private commandsNodes: QuickCommandNode[];
 
-	constructor(private context: vscode.ExtensionContext) {
-		this.path = vscode.workspace.getConfiguration('SSH-Command.config').get('path');
+	constructor(private context: vscode.ExtensionContext, path: string) {
+		this.path = path;
 		this.parseTree();
 	}
 
